@@ -3,60 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Syne:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <title>TempGuard</title>
 </head>
 <body>
     <header>
-        <div class="icon">
-            <img src="/assets/air-conditioner.svg" alt="icon-dashboard">
+        <div class="logo">
+            <div class="logo-icon">
+                <img src="/assets/air-conditioner.svg" alt="icon">
+            </div>
+            <span class="logo-name">TempGuard</span>
         </div>
-        <div class="title">
-            <h1>TempGuard</h1>
+        <div class="live-badge">
+            <span class="live-dot"></span>
+            ao vivo
         </div>
     </header>
+
     <main>
-        <div class="info-air">
-            <div class="temperature">
-                <div class="card-top">
-                    <img src="/assets/temperature.svg" alt="icon-thermometer">
-                    <p><strong>Temperatura</strong></p>
-                </div>
-                <div class="temperature-number">
-                    <p>26 °C</p>
-                </div>
+        <div class="section-label">leitura atual</div>
+        <div class="cards">
+            <div class="card">
+                <div class="card-label">Temperatura</div>
+                <div class="card-value temp"><span id="tempValue">-</span><span class="unit">°C</span></div>
+                <div class="card-sub">Celsius</div>
             </div>
-            <div class="humidity">
-                <div class="card-top">
-                    <img src="/assets/humidity.svg" alt="icon-humidity">
-                    <p><strong>Umidade</strong></p>
-                </div>
-                <div class="humidity-number">
-                    <p>80%</p>
-                </div>
+            <div class="card">
+                <div class="card-label">Umidade</div>
+                <div class="card-value hum"><span id="humValue">-</span><span class="unit">%</span></div>
+                <div class="card-sub">Relativa</div>
             </div>
-            <div class="quality">
-                <div class="card-top">
-                    <img src="/assets/quality.svg" alt="icon-quality-air">
-                    <p><strong>Qualidade</strong></p>
-                </div>
-                <div class="quality-status">
-                    <p>Boa</p>
-                </div>
+            <div class="card">
+                <div class="card-label">Qualidade</div>
+                <div class="card-value qual" id="qualValue">-</div>
+                <div class="card-sub">do ar</div>
             </div>
         </div>
-        <div class="controls">
-            <input type="number" id="tempInput" placeholder="Temperatura">
-            <input type="number" id="humInput" placeholder="Umidade">
-            <input type="text" id="qualInput" placeholder="Qualidade">
 
-            <button onclick="criarDados()">Criar</button>
-            <button onclick="atualizarDados()">Atualizar</button>
-            <button onclick="deletarDados()">Deletar</button>
-        </div>           
+        <div class="section-label">controles</div>
+        <div class="controls">
+            <input type="number" id="tempInput" class="ctrl-input" placeholder="Temperatura">
+            <input type="number" id="humInput" class="ctrl-input" placeholder="Umidade">
+            <select id="qualInput" class="ctrl-input">
+                <option value="" disabled selected>Qualidade</option>
+                <option value="Boa">Boa</option>
+                <option value="Moderada">Moderada</option>
+                <option value="Ruim">Ruim</option>
+            </select>
+            <div class="btn-row">
+                <button class="btn create" onclick="criarDados()">Criar</button>
+                <button class="btn update" onclick="atualizarDados()">Atualizar</button>
+                <button class="btn del" onclick="deletarDados()">Deletar</button>
+            </div>
+        </div>
+
+        <div class="section-label">histórico</div>
+        <div class="historico-box">
+            <div class="historico-head">
+                <span class="chart-title">Registros</span>
+                <input type="date" id="dateFilter" class="ctrl-input date-input" onchange="filtrarHistorico()">
+            </div>
+            <div class="historico-list" id="historicoList">
+                <p class="chart-empty" id="historicoEmpty" style="display:block">Nenhum registro encontrado.</p>
+            </div>
+        </div>
+
+        <div class="section-label">últimas 24h</div>
+        <div class="chart-box">
+            <div class="chart-head">
+                <span class="chart-title" id="chartLabel">Últimas 24h — Temperatura</span>
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('temperatura', this)">Temperatura</button>
+                    <button class="tab" onclick="switchTab('umidade', this)">Umidade</button>
+                </div>
+            </div>
+            <div class="chart-area">
+                <canvas id="avgChart" role="img" aria-label="Gráfico das últimas 24 horas">Dados das últimas 24 horas.</canvas>
+            </div>
+            <p class="chart-empty" id="avgEmpty">Nenhum dado disponível ainda.</p>
+        </div>
     </main>
-    
+
+    <div id="toast" class="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script type="module" src="index.js"></script>
 </body>
 </html>
