@@ -1,4 +1,4 @@
-# TempGuard 🌡️
+# TempGuard
 
 Sistema de monitoramento de ambiente em tempo real, com dashboard web integrado ao Firebase Realtime Database.
 
